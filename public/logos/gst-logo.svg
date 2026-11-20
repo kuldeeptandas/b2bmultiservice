@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="16" fill="#ffffff"/>
+  <!-- Orange top bar -->
+  <rect x="0" y="0" width="120" height="22" rx="16" fill="#f47920"/>
+  <rect x="0" y="10" width="120" height="12" fill="#f47920"/>
+  <!-- Teal bottom bar -->
+  <rect x="0" y="98" width="120" height="22" rx="16" fill="#00a550"/>
+  <rect x="0" y="98" width="120" height="12" fill="#00a550"/>
+  <!-- GST big text -->
+  <text x="60" y="72" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="38" fill="#003366">GST</text>
+  <!-- Tagline -->
+  <text x="60" y="88" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="7.5" fill="#555">Goods and Services Tax</text>
+  <!-- India text -->
+  <text x="60" y="112" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="8" fill="#ffffff">INDIA</text>
+  <!-- Orange text top -->
+  <text x="60" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="8.5" fill="#ffffff">Government of India</text>
+</svg>

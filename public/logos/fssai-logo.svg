@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="16" fill="#ffffff"/>
+  <!-- Green header -->
+  <rect x="0" y="0" width="120" height="30" rx="16" fill="#006633"/>
+  <rect x="0" y="16" width="120" height="14" fill="#006633"/>
+  <text x="60" y="20" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="13" fill="#ffffff">FSSAI</text>
+  <!-- Green circle emblem -->
+  <circle cx="60" cy="65" r="30" fill="#006633"/>
+  <circle cx="60" cy="65" r="27" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Fork (left) -->
+  <line x1="50" y1="48" x2="50" y2="82" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="46" y1="48" x2="46" y2="58" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="54" y1="48" x2="54" y2="58" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <path d="M46 58 Q50 62 54 58" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <!-- Spoon (right) -->
+  <ellipse cx="70" cy="55" rx="6" ry="9" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+  <line x1="70" y1="64" x2="70" y2="82" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <!-- Bottom text -->
+  <text x="60" y="106" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="6.5" fill="#006633">Food Safety &amp; Standards</text>
+  <text x="60" y="116" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="6" fill="#888">Authority of India</text>
+</svg>

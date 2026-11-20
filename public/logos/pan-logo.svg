@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="16" fill="#003366"/>
+  <!-- Card graphic -->
+  <rect x="10" y="25" width="100" height="65" rx="6" fill="#1565c0"/>
+  <rect x="10" y="25" width="100" height="22" rx="6" fill="#0d47a1"/>
+  <rect x="10" y="38" width="100" height="9" fill="#0d47a1"/>
+  <!-- India flag stripe top -->
+  <rect x="10" y="25" width="100" height="4" rx="4" fill="#ff6600"/>
+  <rect x="10" y="25" width="100" height="2" fill="#ff6600"/>
+  <!-- Chip -->
+  <rect x="18" y="37" width="22" height="16" rx="3" fill="#f7c948" stroke="#b8860b" stroke-width="1"/>
+  <line x1="21" y1="37" x2="21" y2="53" stroke="#b8860b" stroke-width="0.8"/>
+  <line x1="27" y1="37" x2="27" y2="53" stroke="#b8860b" stroke-width="0.8"/>
+  <line x1="33" y1="37" x2="33" y2="53" stroke="#b8860b" stroke-width="0.8"/>
+  <line x1="18" y1="43" x2="40" y2="43" stroke="#b8860b" stroke-width="0.8"/>
+  <line x1="18" y1="47" x2="40" y2="47" stroke="#b8860b" stroke-width="0.8"/>
+  <!-- PAN heading -->
+  <text x="65" y="37" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="6" fill="#f7c948">INCOME TAX DEPARTMENT</text>
+  <!-- Big PAN text -->
+  <text x="60" y="72" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="26" fill="#ffffff">PAN</text>
+  <!-- Card number simulation -->
+  <text x="60" y="84" text-anchor="middle" font-family="Courier New,monospace" font-size="8" fill="#90caf9">ABCDE 1234 F</text>
+  <!-- Bottom -->
+  <text x="60" y="104" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="7.5" fill="#f7c948">NSDL / UTI-TSL</text>
+  <text x="60" y="115" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="#90caf9">Permanent Account Number</text>
+</svg>

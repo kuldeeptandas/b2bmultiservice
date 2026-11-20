@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <rect width="120" height="120" rx="16" fill="#8B1A1A"/>
+  <!-- Shield -->
+  <path d="M60 10 L98 24 L98 60 Q98 95 60 112 Q22 95 22 60 L22 24 Z" fill="#a52020" stroke="#f7c948" stroke-width="2.5"/>
+  <!-- Inner shield lighter -->
+  <path d="M60 20 L88 31 L88 60 Q88 88 60 103 Q32 88 32 60 L32 31 Z" fill="#c0392b"/>
+  <!-- Car body -->
+  <rect x="34" y="62" width="52" height="20" rx="4" fill="#ffffff"/>
+  <!-- Car roof -->
+  <path d="M40 62 L48 46 L72 46 L80 62" fill="#ffffff"/>
+  <!-- Windows -->
+  <rect x="49" y="49" width="10" height="11" rx="2" fill="#a52020"/>
+  <rect x="62" y="49" width="10" height="11" rx="2" fill="#a52020"/>
+  <!-- Wheels -->
+  <circle cx="45" cy="82" r="6" fill="#8B1A1A" stroke="#f7c948" stroke-width="2"/>
+  <circle cx="75" cy="82" r="6" fill="#8B1A1A" stroke="#f7c948" stroke-width="2"/>
+  <!-- Text -->
+  <text x="60" y="106" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="8" fill="#f7c948">MOTOR INSURANCE</text>
+  <text x="60" y="116" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="6.5" fill="#ffcdd2">IRDAI Approved</text>
+</svg>

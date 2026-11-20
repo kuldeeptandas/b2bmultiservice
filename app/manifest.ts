@@ -1,0 +1,56 @@
+import type { MetadataRoute } from "next";
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "ShieldDrive Motor Insurance",
+    short_name: "ShieldDrive",
+    description:
+      "Smart Motor Insurance Portal for Customers & Agents. Instant quotes, policy download, and claims.",
+    start_url: "/",
+    id: "/",
+    scope: "/",
+    display: "standalone",
+    orientation: "portrait-primary",
+    background_color: "#ffffff",
+    theme_color: "#2563eb",
+    categories: ["business", "finance"],
+    icons: [
+      {
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-maskable.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+    ],
+    shortcuts: [
+      {
+        name: "Customer Portal",
+        url: "/customer",
+        description: "View policies, quotes & downloads",
+      },
+      {
+        name: "Agent Portal",
+        url: "/agent",
+        description: "Manage customers and commissions",
+      },
+      {
+        name: "Sign Up",
+        url: "/login?mode=signup",
+        description: "Create new customer or agent account",
+      },
+    ],
+  };
+}
+
