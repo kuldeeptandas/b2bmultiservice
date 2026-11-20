@@ -126,18 +126,39 @@ export const ALL_SERVICES: ServiceItem[] = [
     customFields: [
       {
         id: 'assessmentYear',
-        label: 'Assessment Year (AY)',
+        label: 'Assessment Year *',
         type: 'select',
         required: true,
-        defaultValue: 'AY 2026-27 (FY 2025-26)',
+        defaultValue: '2026 - 27 (Available)',
         options: [
-          { label: 'AY 2026-27 (FY 2025-26) - Current Year', value: 'AY 2026-27 (FY 2025-26)' },
-          { label: 'AY 2025-26 (FY 2024-25)', value: 'AY 2025-26 (FY 2024-25)' },
+          { label: '2026 - 27 (Available)', value: '2026 - 27 (Available)' },
+          { label: '2025 - 26 (Previous Year)', value: '2025 - 26' },
         ]
       },
       {
+        id: 'aadhaarNumber',
+        label: 'Aadhar Number *',
+        type: 'text',
+        required: true,
+        placeholder: 'e.g. 3261 3440 5954',
+      },
+      {
+        id: 'panNumber',
+        label: 'Pan Number *',
+        type: 'text',
+        required: true,
+        placeholder: 'e.g. FBKPP7471L',
+      },
+      {
+        id: 'fatherName',
+        label: "Father Name *",
+        type: 'text',
+        required: true,
+        placeholder: 'e.g. RAMJI PRASAD',
+      },
+      {
         id: 'salarySlab',
-        label: 'Annual Salary / Income Slab',
+        label: 'Filing Plan & Income Range *',
         type: 'select',
         required: true,
         defaultValue: 'upto_5L',
@@ -148,11 +169,32 @@ export const ALL_SERVICES: ServiceItem[] = [
         ]
       },
       {
-        id: 'panNumber',
-        label: 'PAN Card Number *',
-        type: 'text',
+        id: 'incomeType',
+        label: 'Income Type *',
+        type: 'select',
         required: true,
-        placeholder: 'e.g. ABCPS1234F',
+        defaultValue: 'Salary',
+        options: [
+          { label: 'Salary', value: 'Salary' },
+          { label: 'Pension', value: 'Pension' },
+          { label: 'Business', value: 'Business' },
+          { label: 'Agriculture', value: 'Agriculture' },
+          { label: 'Others', value: 'Others' },
+        ]
+      },
+      {
+        id: 'totalSalaryPerYear',
+        label: 'Total Salary Per Year (₹) *',
+        type: 'number',
+        required: true,
+        placeholder: 'e.g. 450000',
+      },
+      {
+        id: 'employerName',
+        label: 'Name Of Employer',
+        type: 'text',
+        required: false,
+        placeholder: 'e.g. Employer / Company Name',
       },
       {
         id: 'employerType',
@@ -750,7 +792,7 @@ export const ALL_SERVICES: ServiceItem[] = [
 ];
 
 // LocalStorage helpers for dynamic Admin service management
-const STORAGE_KEY_SERVICES = "b2b_portal_services_v3";
+const STORAGE_KEY_SERVICES = "b2b_portal_services_v4";
 
 export function getPortalServices(): ServiceItem[] {
   if (typeof window === "undefined") return ALL_SERVICES;
