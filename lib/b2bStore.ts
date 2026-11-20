@@ -626,6 +626,13 @@ export const ALL_SERVICES: ServiceItem[] = [
     description: 'Instant collateral-free loans from 40+ leading Banks & NBFCs with attractive interest rates starting 11.5% p.a.',
     customFields: [
       {
+        id: 'businessName',
+        label: 'Firm / Enterprise Name *',
+        type: 'text',
+        required: true,
+        placeholder: 'e.g. ABC Traders / ABC Industries',
+      },
+      {
         id: 'loanAmountNeeded',
         label: 'Required Loan Amount *',
         type: 'select',
@@ -668,8 +675,15 @@ export const ALL_SERVICES: ServiceItem[] = [
     description: 'Paperless personal loan approval for private and government salaried individuals with flexible EMI tenures.',
     customFields: [
       {
+        id: 'loanAmountNeeded',
+        label: 'Required Loan Amount (₹) *',
+        type: 'number',
+        required: true,
+        placeholder: 'e.g. 200000',
+      },
+      {
         id: 'monthlySalary',
-        label: 'Monthly Take-Home Salary (₹)',
+        label: 'Monthly Take-Home Salary (₹) *',
         type: 'number',
         required: true,
         placeholder: 'e.g. 35000',
@@ -705,6 +719,13 @@ export const ALL_SERVICES: ServiceItem[] = [
     requiredDocs: ['Property Registry / Fard Copy', 'Income Proofs / ITR (2-3 Yrs)', 'Aadhaar & PAN', 'Bank Statement (1 Yr)'],
     description: 'Finance new home purchase, construction, or unlock commercial/residential property value with Loan Against Property.',
     customFields: [
+      {
+        id: 'loanAmountNeeded',
+        label: 'Required Loan Amount (₹) *',
+        type: 'number',
+        required: true,
+        placeholder: 'e.g. 2500000',
+      },
       {
         id: 'propertyKind',
         label: 'Property Type *',
