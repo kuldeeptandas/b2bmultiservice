@@ -8,8 +8,8 @@ export interface SupabaseConfig {
 
 export function getSupabaseConfig(): SupabaseConfig {
   return {
-    url: (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim().replace(/\/$/, ''),
-    anonKey: (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim(),
+    url: (process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://znczgsciibtihbjrokro.supabase.co').trim().replace(/\/$/, ''),
+    anonKey: (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_G3gBkdWcOFEjoJc0WYVJOQ_ke5hhQ4V').trim(),
   };
 }
 
