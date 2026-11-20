@@ -655,7 +655,7 @@ export default function B2BMultiServicePortal() {
         applicantName,
         applicantPhone,
         applicantEmail: applicantEmail || currentUser.email,
-        businessName: businessName || customFieldValues.businessName || applicantName,
+        businessName: customFieldValues.businessName || customFieldValues.tradeName || customFieldValues.enterpriseName || customFieldValues.foodBusinessName || customFieldValues.foodUnitName || businessName || applicantName,
         status: "Pending",
         statusColor: "blue",
         amount: `₹${pointsToCut}`,
@@ -3334,8 +3334,8 @@ export default function B2BMultiServicePortal() {
               </div>
             ) : (
               <form onSubmit={handleFormSubmit} className="mt-4 space-y-4">
-                {/* Applicant Contact Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {/* Applicant Contact Info - Strictly Essential, Clean 3-Column */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-slate-700 block mb-1">
                       Applicant Full Name *
@@ -3346,7 +3346,7 @@ export default function B2BMultiServicePortal() {
                       value={applicantName}
                       onChange={(e) => setApplicantName(e.target.value)}
                       placeholder="e.g. Gurpreet Singh"
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
                     />
                   </div>
                   <div>
@@ -3359,12 +3359,9 @@ export default function B2BMultiServicePortal() {
                       value={applicantPhone}
                       onChange={(e) => setApplicantPhone(e.target.value)}
                       placeholder="+91 98765-43210"
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-slate-700 block mb-1">Email Address</label>
                     <input
@@ -3372,30 +3369,20 @@ export default function B2BMultiServicePortal() {
                       value={applicantEmail}
                       onChange={(e) => setApplicantEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Business / Firm Name</label>
-                    <input
-                      type="text"
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      placeholder="e.g. ABC Enterprises / ABC Trading"
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium"
                     />
                   </div>
                 </div>
 
-                {/* DYNAMIC SERVICE-SPECIFIC CUSTOM FIELDS */}
+                {/* DYNAMIC SERVICE-SPECIFIC CUSTOM FIELDS - EXCLUSIVELY RELEVANT TO THIS SERVICE */}
                 {selectedService.customFields && selectedService.customFields.length > 0 && (
                   <div className="p-3.5 bg-blue-50/60 rounded-xl border border-blue-200/80 space-y-3">
                     <div className="flex items-center justify-between border-b border-blue-100 pb-2">
                       <span className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                        📋 Required Service Details & Dynamic Options
+                        📋 {selectedService.title} Details
                       </span>
-                      <span className="text-[10px] text-blue-700 bg-blue-100 font-semibold px-2 py-0.5 rounded">
-                        Service Configuration
+                      <span className="text-[10px] text-blue-700 bg-blue-100 font-semibold px-2 py-0.5 rounded capitalize">
+                        {selectedService.category} Specific
                       </span>
                     </div>
 
@@ -3445,10 +3432,10 @@ export default function B2BMultiServicePortal() {
                   </div>
                 )}
 
-                {/* Document Upload */}
+                {/* Document Upload - Tailored exclusively to the selected service */}
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">
-                    Upload Documents (Aadhaar / PAN / RC / Form 16 / Bank Statement)
+                    Upload Documents ({selectedService.requiredDocs && selectedService.requiredDocs.length > 0 ? selectedService.requiredDocs.join(' • ') : 'Aadhaar / PAN'})
                   </label>
                   <label className="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer bg-slate-50 hover:bg-blue-50/40 transition">
                     <IconUpload className="w-5 h-5 text-slate-400 mb-1" />
