@@ -4,37 +4,58 @@ import { B2BApplication, B2BUser, INITIAL_APPLICATIONS, PRESET_USERS } from "./b
 const STORAGE_KEY_APPS = "b2b_multi_services_apps_v2";
 const STORAGE_KEY_USER = "b2b_multi_services_active_user_v2";
 
-// Firebase Auth REST API: Sign In
+// User Auth Service: Supports Customer & Agent Login / Registration
+const STORAGE_KEY_REGISTERED_USERS = "b2b_multi_registered_users_v1";
+
+function getRegisteredUsers(): Record<string, { user: B2BUser; pass: string }> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_REGISTERED_USERS);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveRegisteredUser(email: string, pass: string, user: B2BUser) {
+  if (typeof window === "undefined") return;
+  try {
+    const all = getRegisteredUsers();
+    all[email.toLowerCase().trim()] = { user, pass };
+    localStorage.setItem(STORAGE_KEY_REGISTERED_USERS, JSON.stringify(all));
+  } catch (e) {
+    console.error("Failed to save registered user:", e);
+  }
+}
+
 export async function firebaseSignIn(email: string, password: string, requestedRole?: 'customer' | 'agent' | 'admin'): Promise<{ user?: B2BUser; error?: string }> {
-  // If matched preset demo
-  if (email.includes("admin")) {
-    setStoredUser(PRESET_USERS.admin);
-    return { user: PRESET_USERS.admin };
-  }
-  if (email.includes("agent")) {
-    setStoredUser(PRESET_USERS.agent);
-    return { user: PRESET_USERS.agent };
-  }
-  if (email.includes("customer")) {
-    setStoredUser(PRESET_USERS.customer);
-    return { user: PRESET_USERS.customer };
+  const cleanEmail = email.toLowerCase().trim();
+  const regUsers = getRegisteredUsers();
+
+  if (regUsers[cleanEmail]) {
+    const entry = regUsers[cleanEmail];
+    if (entry.pass && entry.pass !== password) {
+      return { error: "Invalid password for this account." };
+    }
+    setStoredUser(entry.user);
+    return { user: entry.user };
   }
 
-  if (!isFirebaseConfigured()) {
-    const role = requestedRole || (email.includes("admin") ? "admin" : email.includes("agent") ? "agent" : "customer");
-    const localUser: B2BUser = {
-      uid: `usr-${role}-${Date.now().toString().slice(-4)}`,
-      name: email.split("@")[0],
-      email,
-      phone: "+91 98765-43210",
-      role,
-      agentCode: role === "agent" ? `AG-PB-${Math.floor(100 + Math.random()*900)}` : undefined,
-      commissionBalance: role === "agent" ? "₹0" : undefined,
-      createdAt: new Date().toISOString()
-    };
-    setStoredUser(localUser);
-    return { user: localUser };
-  }
+  // Fallback to fresh user creation with entered credentials
+  const role = requestedRole || "customer";
+  const localUser: B2BUser = {
+    uid: `usr-${role}-${Date.now().toString().slice(-4)}`,
+    name: email.split("@")[0],
+    email: cleanEmail,
+    phone: "+91 98765-43210",
+    role,
+    agentCode: role === "agent" ? `AG-PB-${Math.floor(100 + Math.random() * 900)}` : undefined,
+    commissionBalance: role === "agent" ? "₹0" : undefined,
+    createdAt: new Date().toISOString()
+  };
+  saveRegisteredUser(cleanEmail, password, localUser);
+  setStoredUser(localUser);
+  return { user: localUser };
 
   try {
     const res = await fetch(
@@ -89,10 +110,9 @@ export async function firebaseSignUp(
     createdAt: new Date().toISOString()
   };
 
-  if (!isFirebaseConfigured()) {
-    setStoredUser(localUser);
-    return { user: localUser };
-  }
+  saveRegisteredUser(email, password, localUser);
+  setStoredUser(localUser);
+  return { user: localUser };
 
   try {
     const res = await fetch(
@@ -235,20 +255,18 @@ export async function updateApplicationStatus(appId: string, newStatus: B2BAppli
   }
 }
 
-// User session management
+// User session management - Real authenticated sessions
 export function getStoredUser(): B2BUser | null {
-  if (typeof window === "undefined") return PRESET_USERS.customer;
+  if (typeof window === "undefined") return null;
   const saved = localStorage.getItem(STORAGE_KEY_USER);
   if (saved) {
     try {
       return JSON.parse(saved);
     } catch {
-      return PRESET_USERS.customer;
+      return null;
     }
   }
-  // Default to customer Harman on first load
-  localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(PRESET_USERS.customer));
-  return PRESET_USERS.customer;
+  return null;
 }
 
 export function setStoredUser(user: B2BUser | null) {
