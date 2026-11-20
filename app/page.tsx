@@ -723,7 +723,7 @@ export default function B2BMultiServicePortal() {
   const totalInterest = totalPayable - P;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row font-sans">
+    <div className="h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row font-sans overflow-hidden">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed top-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700 animate-bounce">
@@ -2912,8 +2912,8 @@ export default function B2BMultiServicePortal() {
 
           {/* ADMIN SERVICE CONFIGURATOR MODAL */}
           {adminServiceModalOpen && (
-            <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-              <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 my-8 space-y-4">
+            <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+              <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto space-y-4">
                 <div className="flex justify-between items-start pb-3 border-b border-slate-100">
                   <div>
                     <span className="text-xs font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded">
@@ -3164,11 +3164,11 @@ export default function B2BMultiServicePortal() {
       {/* ── SERVICE DETAIL POPUP MODAL ── */}
       {serviceDetailModalOpen && serviceDetailItem && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"
           onClick={() => setServiceDetailModalOpen(false)}
         >
           <div
-            className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 my-8 overflow-hidden"
+            className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -3269,8 +3269,8 @@ export default function B2BMultiServicePortal() {
 
       {/* SERVICE APPLY MODAL */}
       {applyModalOpen && selectedService && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 my-8">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div>
                 <span className="text-xs font-bold text-blue-600 uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded">
@@ -3680,7 +3680,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 1. UPLOAD PENDING DOCUMENTS MODAL ── */}
       {activeActionModal === 'upload' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold">
@@ -3762,7 +3762,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 2. UNDER OBJECTION / CLARIFICATION RESOLUTION MODAL ── */}
       {activeActionModal === 'objection' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-base">
@@ -3838,7 +3838,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 3. E-VERIFY / AADHAAR OTP MODAL ── */}
       {activeActionModal === 'everify' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-base">
@@ -3927,7 +3927,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 4. PAYMENT / STATUTORY CHALLAN MODAL ── */}
       {activeActionModal === 'payment' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-base">
@@ -4008,7 +4008,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 5. INDIA POST SPEEDPOST LIVE TRACKING MODAL ── */}
       {activeActionModal === 'dispatch' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-base">
@@ -4070,7 +4070,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 6. DOWNLOAD CERTIFICATE / OFFICIAL PDF MODAL ── */}
       {activeActionModal === 'download' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-base">
@@ -4125,7 +4125,7 @@ export default function B2BMultiServicePortal() {
       {/* ── 7. LIVE PROCESSING STAGE TRACKER MODAL ── */}
       {activeActionModal === 'processing' && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-base">
