@@ -5,7 +5,6 @@ import {
   ALL_SERVICES,
   B2BApplication,
   B2BUser,
-  PRESET_USERS,
   ServiceItem,
   ServiceCustomField,
   ServiceCustomFieldOption,
@@ -400,11 +399,16 @@ export default function B2BMultiServicePortal() {
 
   // Initial load on mount
   useEffect(() => {
-    const user = getStoredUser() || PRESET_USERS.customer;
-    setCurrentUser(user);
-    loadUserApplications(user);
-    refreshWallet(user);
-    
+    const user = getStoredUser(); // Returns null if not logged in
+    if (user) {
+      setCurrentUser(user);
+      loadUserApplications(user);
+      refreshWallet(user);
+    } else {
+      // No session → show login modal
+      setAuthModalOpen(true);
+    }
+
     // Load services from Supabase if configured, otherwise from local store
     fetchServicesFromSupabase().then((srvs) => {
       if (srvs && srvs.length > 0) setPortalServices(srvs);
@@ -492,16 +496,7 @@ export default function B2BMultiServicePortal() {
     return comm;
   }, [selectedService, customFieldValues]);
 
-  // Handle Switch User / Role
-  const handleSwitchUser = async (role: 'customer' | 'agent' | 'admin') => {
-    const targetUser = PRESET_USERS[role];
-    setCurrentUser(targetUser);
-    setStoredUser(targetUser);
-    await loadUserApplications(targetUser);
-    refreshWallet(targetUser);
-    setAuthModalOpen(false);
-    showToast(`Logged in as ${targetUser.name} (${role.toUpperCase()})`);
-  };
+  // handleSwitchUser removed — no demo role switching
 
   // Handle Auth Submit
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -894,19 +889,14 @@ export default function B2BMultiServicePortal() {
         <div className="p-4 border-t border-slate-800 bg-slate-950/60">
           {currentUser && (
             <div className="flex items-center justify-between mb-3">
-              <div 
-                onClick={() => setAuthModalOpen(true)}
-                className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition"
-                title="Click to Switch Role (Customer / Agent / Admin)"
-              >
+              <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-blue-600/30 border border-blue-500/40 text-blue-300 flex items-center justify-center font-bold text-xs">
                   {currentUser.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="overflow-hidden">
                   <p className="text-xs font-semibold text-white truncate max-w-[120px]">{currentUser.name}</p>
-                  <p className="text-[10px] text-blue-400 font-medium hover:underline flex items-center gap-1">
+                  <p className="text-[10px] text-blue-400 font-medium flex items-center gap-1">
                     <span>{currentUser.role.toUpperCase()}</span>
-                    <span>▾</span>
                   </p>
                 </div>
               </div>
@@ -949,68 +939,36 @@ export default function B2BMultiServicePortal() {
               <IconMenu className="w-6 h-6" />
             </button>
 
-            {/* Current Role Status & Switcher in Header */}
+            {/* B2B Portal Branding in Header */}
             <div className="flex items-center gap-2">
-              <div 
-                onClick={() => setAuthModalOpen(true)}
-                className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 rounded-xl cursor-pointer transition shadow-2xs"
-                title="Click to Switch Role (Customer / Agent / Admin)"
-              >
-                <div className="flex flex-col">
-                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-none">Current Role</span>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className={`w-2 h-2 rounded-full ${
-                      currentUser?.role === 'admin' ? 'bg-amber-500' : currentUser?.role === 'agent' ? 'bg-indigo-600' : 'bg-emerald-500'
-                    } animate-pulse`}></span>
-                    <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider leading-none">
-                      {currentUser?.role || "Guest"}
-                    </span>
-                  </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold leading-none">Signed in as</span>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className={`w-2 h-2 rounded-full ${
+                    currentUser?.role === 'agent' ? 'bg-indigo-600' : 'bg-emerald-500'
+                  } animate-pulse`}></span>
+                  <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider leading-none">
+                    {currentUser?.role === 'agent' ? 'AGENT' : 'CUSTOMER'}
+                  </span>
                 </div>
               </div>
-              <button
-                onClick={() => setAuthModalOpen(true)}
-                className="text-xs px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-bold shadow-xs whitespace-nowrap cursor-pointer"
-              >
-                Switch Role
-              </button>
             </div>
           </div>
 
           {/* Right side Actions & Wallet */}
           <div className="flex items-center gap-2">
-            {currentUser?.role === 'admin' ? (
-              <button
-                onClick={() => setActiveTab('admin')}
-                className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition flex items-center gap-1.5 border cursor-pointer ${
-                  activeTab === 'admin'
-                    ? 'bg-amber-600 text-white border-amber-600 shadow'
-                    : 'bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-700 border-slate-300'
-                }`}
-                title="Super Admin Master Panel"
-              >
-                <IconAdmin className="w-4 h-4 text-amber-500" />
-                <span>Admin Panel</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
-                  activeTab === 'admin' ? 'bg-white/20 text-white' : 'bg-amber-500/20 text-amber-700'
-                }`}>
-                  {applications.length}
-                </span>
-              </button>
-            ) : (
-              <button
-                onClick={() => setActiveTab('track')}
-                className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition flex items-center gap-1.5 border cursor-pointer ${
-                  activeTab === 'track'
-                    ? 'bg-purple-600 text-white border-purple-600 shadow'
-                    : 'bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border-slate-300'
-                }`}
-                title="Track Application Status"
-              >
-                <IconTrack className="w-4 h-4 text-purple-500" />
-                <span>Track Application</span>
-              </button>
-            )}
+            <button
+              onClick={() => setActiveTab('track')}
+              className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition flex items-center gap-1.5 border cursor-pointer ${
+                activeTab === 'track'
+                  ? 'bg-purple-600 text-white border-purple-600 shadow'
+                  : 'bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border-slate-300'
+              }`}
+              title="Track Application Status"
+            >
+              <IconTrack className="w-4 h-4 text-purple-500" />
+              <span>Track Application</span>
+            </button>
 
             <button
               onClick={() => { setActiveTab('wallet'); setWalletPageTab('wallet'); }}
@@ -3646,138 +3604,145 @@ export default function B2BMultiServicePortal() {
         </div>
       )}
 
-      {/* ROLE SWITCH & AUTH MODAL */}
+      {/* CUSTOMER / AGENT AUTH MODAL */}
       {authModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
-                  <IconUser className="w-4 h-4" />
+        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                  <IconUser className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                  <h3 className="font-bold text-base text-slate-900">Select Role / Sign In</h3>
-                  <p className="text-[11px] text-slate-500">Strict Data Privacy & Isolated Dashboards</p>
-                </div>
+                {currentUser && (
+                  <button onClick={() => setAuthModalOpen(false)} className="text-white/60 hover:text-white p-1">
+                    <IconX className="w-5 h-5" />
+                  </button>
+                )}
               </div>
-              <button onClick={() => setAuthModalOpen(false)} className="text-slate-400 hover:text-slate-600 p-1">
-                <IconX className="w-5 h-5" />
-              </button>
+              <h3 className="font-black text-xl leading-tight">B2B Multi Service Portal</h3>
+              <p className="text-blue-100 text-xs mt-1">Govt & Business Services for Customers & Partners</p>
+
+              {/* Login / Signup toggle */}
+              <div className="flex mt-4 bg-white/10 rounded-xl p-1 gap-1">
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('login')}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition ${authMode === 'login' ? 'bg-white text-blue-700 shadow' : 'text-white/80 hover:text-white'}`}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('register')}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition ${authMode === 'register' ? 'bg-white text-blue-700 shadow' : 'text-white/80 hover:text-white'}`}
+                >
+                  New Account
+                </button>
+              </div>
             </div>
 
-            {/* Instant Role Switcher Buttons */}
-            <div className="my-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
-              <span className="text-xs font-bold text-slate-700 block uppercase tracking-wider">
-                Instant Demo Access (Click to Test Role):
-              </span>
-
-              {/* Customer */}
-              <button
-                type="button"
-                onClick={() => handleSwitchUser('customer')}
-                className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition ${
-                  currentUser?.role === 'customer'
-                    ? 'border-emerald-500 bg-emerald-50/50'
-                    : 'border-slate-200 bg-white hover:border-emerald-300'
-                }`}
-              >
-                <div>
-                  <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    Customer Portal (Harman Preet)
-                  </div>
-                  <div className="text-[11px] text-slate-500">Sees ONLY Harman&apos;s 2 personal applications</div>
-                </div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                  Customer
-                </span>
-              </button>
-
-              {/* Agent */}
-              <button
-                type="button"
-                onClick={() => handleSwitchUser('agent')}
-                className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition ${
-                  currentUser?.role === 'agent'
-                    ? 'border-indigo-500 bg-indigo-50/50'
-                    : 'border-slate-200 bg-white hover:border-indigo-300'
-                }`}
-              >
-                <div>
-                  <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                    Agent Desk (Jaspreet Singh)
-                  </div>
-                  <div className="text-[11px] text-slate-500">Sees ONLY Jaspreet&apos;s client files & commissions</div>
-                </div>
-                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
-                  Agent
-                </span>
-              </button>
-
-              {/* Admin */}
-              <button
-                type="button"
-                onClick={() => handleSwitchUser('admin')}
-                className={`w-full p-2.5 rounded-xl border flex items-center justify-between text-left transition ${
-                  currentUser?.role === 'admin'
-                    ? 'border-amber-500 bg-amber-50/50'
-                    : 'border-slate-200 bg-white hover:border-amber-300'
-                }`}
-              >
-                <div>
-                  <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                    Super Admin (Tanda Master)
-                  </div>
-                  <div className="text-[11px] text-slate-500">Sees 100% of all applications & master controls</div>
-                </div>
-                <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
-                  Admin Master
-                </span>
-              </button>
-            </div>
-
-            {/* Email / Password Sign In option */}
-            <div className="pt-2 border-t border-slate-100">
-              <span className="text-xs font-semibold text-slate-500 block mb-2">Or Sign In with Email:</span>
+            {/* Form Body */}
+            <div className="p-6">
               <form onSubmit={handleAuthSubmit} className="space-y-3">
-                <div className="flex gap-2 text-xs">
-                  <select
-                    value={authRoleSelect}
-                    onChange={(e) => setAuthRoleSelect(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold"
-                  >
-                    <option value="customer">Role: Customer</option>
-                    <option value="agent">Role: Business Agent</option>
-                    <option value="admin">Role: Administrator</option>
-                  </select>
+                {/* Role Select: Customer or Agent only (Admin has /admin page) */}
+                <div>
+                  <label className="text-xs font-bold text-slate-600 block mb-1 uppercase tracking-wider">I am a:</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setAuthRoleSelect('customer')}
+                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                        authRoleSelect === 'customer'
+                          ? 'bg-emerald-600 text-white border-emerald-600 shadow'
+                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-emerald-300'
+                      }`}
+                    >
+                      <span>👤</span> Customer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAuthRoleSelect('agent')}
+                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                        authRoleSelect === 'agent'
+                          ? 'bg-indigo-600 text-white border-indigo-600 shadow'
+                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-indigo-300'
+                      }`}
+                    >
+                      <span>🤝</span> Business Agent
+                    </button>
+                  </div>
                 </div>
 
+                {/* Name field (Sign Up only) */}
+                {authMode === 'register' && (
+                  <input
+                    type="text"
+                    value={authName}
+                    onChange={(e) => setAuthName(e.target.value)}
+                    placeholder="Full Name *"
+                    required
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  />
+                )}
+
+                {/* Phone field (Sign Up only) */}
+                {authMode === 'register' && (
+                  <input
+                    type="tel"
+                    value={authPhone}
+                    onChange={(e) => setAuthPhone(e.target.value)}
+                    placeholder="Mobile Number (10 digits) *"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  />
+                )}
+
+                {/* Email */}
                 <input
                   type="email"
                   required
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
-                  placeholder="Enter email (e.g. user@example.com)"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs"
+                  placeholder="Email Address *"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
+
+                {/* Password */}
                 <input
                   type="password"
                   required
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
-                  placeholder="Password"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs"
+                  placeholder="Password *"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
 
                 <button
                   type="submit"
-                  className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition"
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-sm font-extrabold shadow-md transition"
                 >
-                  Sign In / Register
+                  {authMode === 'login' ? '→ Sign In to Portal' : '→ Create My Account'}
                 </button>
               </form>
+
+              <div className="mt-4 pt-4 border-t border-slate-100 text-center space-y-2">
+                <p className="text-xs text-slate-400">
+                  {authMode === 'login' ? "Don't have an account?" : "Already have an account?"}
+                  <button
+                    type="button"
+                    onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                    className="text-blue-600 font-bold ml-1 hover:underline"
+                  >
+                    {authMode === 'login' ? 'Create Account' : 'Sign In'}
+                  </button>
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  Admin?{' '}
+                  <a href="/admin" className="text-amber-600 font-bold hover:underline">
+                    Go to Admin Hub →
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
